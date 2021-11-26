@@ -1,0 +1,48 @@
+html, body {
+    background: #1d2026;
+    margin-left: 5%;
+    margin-right: 5%;
+    color: red;
+}
+.title {
+    margin-left: auto;
+    margin-right: auto;
+}
+.logo {
+    max-width:100%;
+    max-height:100%;
+    overflow: visible;
+    cursor: pointer;
+}
+.navbar {
+    background-color: rgba(0,97,72,0.89);
+}
+.side-bar {
+    background-color: #5b5b5b;
+    flex: 0 0 12%;
+    border: 2px solid grey;
+    border-collapse: collapse;
+    line-height: 2rem;
+    font-size: 1rem;
+}
+.foot {
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    background: #36393F;
+    border-top: 5px solid rgba(54,57,63,0.9);
+}
+.photo {
+    max-width: 100%;
+    height: auto;
+}
+.post {
+    margin-top: 5%;
+    border: solid black;
+    border-width: 3px;
+    margin-bottom: 3%;
+}
+.tags {
+    border: solid black;
+    border-width: 1px;
+}
