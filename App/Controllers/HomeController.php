@@ -64,9 +64,56 @@ class HomeController extends AControllerRedirect
     public function createpost()
     {
         if(!Auth::isLogged()) {
-            $this->redirect('home');
+            $this->redirect('auth','login');
         }
         return $this->html();
+    }
+
+    public function editpost()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+
+        $postID = $this->request()->getValue('postID');
+        $posts = Forum::getAll("id = ?", [$postID]);
+        //$forumpost = Forum::getOne($postID);
+
+        return $this->html(
+            [
+                'forum' => $posts
+            ]);
+    }
+
+    public function editsave()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+        $id = $this->request()->getValue('postID');
+        $title = $this->request()->getValue('title');
+        $tags = $this->request()->getValue('tags');
+        $text = $this->request()->getValue('text');
+        $forumpost = Forum::getOne($id);
+        $forumpost->setTitle($title);
+        $forumpost->setTags($tags);
+        $forumpost->setText($text);
+        $forumpost->save();
+
+        $this->redirect('home','forum');
+    }
+
+    public function deletepost()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+
+        $postID = $this->request()->getValue('postID');
+        $forumpost = Forum::getOne($postID);
+        $forumpost->delete();
+
+        $this->redirect('home','forum');
     }
 
     public function uploadpost()

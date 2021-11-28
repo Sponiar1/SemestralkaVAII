@@ -1,6 +1,5 @@
 <?php ?>
 <div class="container">
-    <div class="title">
     <h1> NEW POST </h1>
         <form method="post"  action="?c=home&a=uploadpost">
             <div class="form-group m-2">
@@ -16,5 +15,5 @@
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Odoslať</button>
             </div>
-    </form>
+        </form>
 </div>

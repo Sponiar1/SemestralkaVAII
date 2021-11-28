@@ -107,5 +107,8 @@ class Forum extends \App\Core\Model
         $this->text = $text;
     }
 
-
+    public function getComments()
+    {
+        return Comment::getAll('post_id = ?', [$this->id]);
+    }
 }

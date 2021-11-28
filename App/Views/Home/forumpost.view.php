@@ -22,7 +22,21 @@
             <div class="text-white">
                 <?= $post->getText() ?>
             </div>
-
+            <?php if (\App\Auth::isLogged()) { ?>
+                <div class="text-start mt-2">
+                    <form method="post" action="?c=home&a=addComment">
+                        <input type="hidden" name="postid" value="<?= $post->getId() ?>">
+                        <input type="text" size="19" name="text" placeholder="Vlož svoj komentár">
+                        <input type="submit" value="Pošli" name="comment">
+                    </form>
+                </div>
+                <div class="text-start mt-2">
+                    <strong>Komentáre:</strong>
+                    <?php foreach ($post->getComments() as $comment) { ?>
+                        <?= $comment->getText() ?><br>
+                    <?php } ?>
+                </div>
+            <?php } ?>
         </div>
     <?php } ?>
 </div>
