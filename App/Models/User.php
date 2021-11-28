@@ -16,7 +16,7 @@ class User extends \App\Core\Model
     public function getUser($login, $password)
     {
         self::connect();
-        $pr = Connection::connect()->prepare('SELECT * FROM users WHERE mail = ? AND password = ?');
+        $pr = Connection::connect()->prepare('SELECT * FROM users WHERE mail = ? and password = ?');
         $pr->execute([$login, $password]);
         /*$users = $pr->fetchAll();*/
         $count = $pr->rowCount();
@@ -41,6 +41,15 @@ class User extends \App\Core\Model
         return $count;
     }
 
+    public function getUserIDByMail()
+    {
+        self::connect();
+        $pr = Connection::connect()->prepare('SELECT * FROM users WHERE mail = ?');
+        $pr->execute([$_SESSION['name']]);
+        $id = $pr->fetch();
+        $foundid = $id['id'];
+        return $foundid;
+    }
     /**
      * @return int
      */

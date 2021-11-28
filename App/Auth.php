@@ -59,8 +59,12 @@ class Auth
                 $userlist->setPassword($password);
                 $userlist->setMail($login);
                 $userlist->save();
-                return true;
+                return "OK";
             }
+            if ($loginNumber == 1)
+                return "Mail already used";
+            if ($usernameNumber == 1)
+                return "Username already used";
             return false;
     }
 }

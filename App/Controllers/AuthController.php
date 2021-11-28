@@ -62,15 +62,19 @@ class AuthController extends AControllerRedirect
         $login = $this->request()->getValue('login');
         $password = $this->request()->getValue('password');
         $username = $this->request()->getValue('username');
-
-        if(Auth::register($login, $password, $username))
+        $registered = Auth::register($login, $password, $username);
+        if($registered == "OK")
         {
             $logged = Auth::login($login, $password);
             if ($logged) {
                 $this->redirect('home');
             }
+        } else if ($registered == "Mail already used"){
+            $this->redirect('auth', 'registerForm', ['error' => 'Mail already used']);
+        } else if ($registered == "Username already used"){
+            $this->redirect('auth', 'registerForm', ['error' => 'Username already used']);
         } else {
-            $this->redirect('auth', 'registerForm', ['error' => 'Try again!']);
+            $this->redirect('auth', 'registerForm', ['error' => 'Error']);
         }
     }
 }

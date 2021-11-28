@@ -6,6 +6,7 @@ use App\Auth;
 use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\User;
 
 /**
  * Class HomeController
@@ -51,6 +52,7 @@ class HomeController extends AControllerRedirect
         }
         $this->redirect("home");
     }
+
     public function post()
     {
         if(!Auth::isLogged()) {
@@ -59,11 +61,39 @@ class HomeController extends AControllerRedirect
         return $this->html();
     }
 
+    public function createpost()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('home');
+        }
+        return $this->html();
+    }
+
+    public function uploadpost()
+    {
+        if (!Auth::isLogged()) {
+            $this->redirect("home");
+        }
+        $title = $this->request()->getValue('title');
+        $tags = $this->request()->getValue('tags');
+        $text = $this->request()->getValue('text');
+        $usertable = new User();
+        $userID = $usertable->getUserIDByMail();
+                $newForum = new Forum();
+                $newForum->setTitle($title);
+                $newForum->setText($text);
+                $newForum->setTags($tags);
+                $newForum->setUserId($userID);
+                $newForum->save();
+
+        $this->redirect("home");
+    }
+
     public function forumpost()
     {
         $id = $this->request()->getValue('id');
         $posts = Forum::getAll("id = ?", [$id]);
-
+        //$posts = Forum::getOne($id);
         return $this->html(
             [
                 'forum' => $posts
