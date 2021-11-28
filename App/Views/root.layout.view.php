@@ -44,6 +44,9 @@
                     <li class="nav-item ml-0">
                         <a class="nav-link" href="?c=home&a=post">Pridanie fotky</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?c=home&a=profile">Profile</a>
+                    </li>
                     <li class="nav-item justify-content-end mr-0">
                         <a class="nav-link" href="?c=auth&a=logout">Logout</a>
                     </li>

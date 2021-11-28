@@ -182,6 +182,13 @@ class HomeController extends AControllerRedirect
             ]);
     }
 
+    public function profile()
+    {
+        $usertable = new User();
+        $profil = User::getOne($usertable->getUserIDByMail());
+        return $this->html($profil);
+    }
+
     public function addComment()
     {
         if (!Auth::isLogged()) {
