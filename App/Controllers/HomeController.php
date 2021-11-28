@@ -139,12 +139,9 @@ class HomeController extends AControllerRedirect
     public function forumpost()
     {
         $id = $this->request()->getValue('id');
-        $posts = Forum::getAll("id = ?", [$id]);
-        //$posts = Forum::getOne($id);
-        return $this->html(
-            [
-                'forum' => $posts
-            ]);
+        //$posts = Forum::getAll("id = ?", [$id]);
+        $posts = Forum::getOne($id);
+        return $this->html($posts);
     }
 
     public function contact()
@@ -192,12 +189,16 @@ class HomeController extends AControllerRedirect
         }
 
         $postId = $this->request()->getValue('postid');
+        $usertable = new User();
+        $user_id = $usertable->getUserIDByMail();
+        $idpostu['id'] = $postId;
         if($postId) {
             $newComment = new Comment();
             $newComment->setPostId($postId);
+            $newComment->setUserId($user_id);
             $newComment->setText($this->request()->getValue('text'));
             $newComment->save();
         }
-        $this->redirect('home');
+        $this->redirect('home', 'forumpost', $idpostu);
     }
 }

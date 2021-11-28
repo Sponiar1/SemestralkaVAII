@@ -7,14 +7,30 @@ use App\Core\Model;
 class Comment extends Model
 {
 
-    public function __construct(public int $id = 0, public ?string $text = null, public int $post_id = 0)
+    public function __construct(public int $id = 0, public ?string $text = null, public int $post_id = 0, public int $user_id = 0)
     {
 
     }
 
     static public function setDbColumns()
     {
-        return ['id', 'post_id', 'text'];
+        return ['id', 'post_id', 'text', 'user_id'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function setUserId(int $user_id): void
+    {
+        $this->user_id = $user_id;
     }
 
     static public function setTableName()
