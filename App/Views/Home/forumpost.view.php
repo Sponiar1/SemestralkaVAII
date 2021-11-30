@@ -30,7 +30,7 @@
                         <input type="submit" value="Pošli" name="comment">
                     </form>
                 </div>
-                <div class="text-start mt-2">
+                <div class="comments text-start mt-2">
                     <strong>Komentáre:</strong><br>
                     <?php foreach ($data->getComments() as $comment) { ?>
                         <?php $commentUser=\App\Models\User::getOne($comment->getUserId()) ?>

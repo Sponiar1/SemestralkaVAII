@@ -14,15 +14,15 @@
         <?php foreach ($data['forum_posts'] as $post) { ?>
         <div class="post">
             <div class="row">
-                <div class="col-9">
+                <div class="col-8">
                     <a href="?c=home&a=forumpost&id=<?= $post->getId()?>">
             <h2>
                 <?= $post->getTitle() ?>
             </h2>
                     </a>
                 </div>
-                <div class="col-3 justify-content-end row">
-                    <div>
+                <div class="col-4 text-end row">
+                    <div class="options">
                     by <?= $post->getUser()->getUsername() ?>
                         <?php if (\App\Auth::isLogged() && $post->getUser()->getMail() == $_SESSION['name']) {?>
                         <a href="?c=home&a=editpost&postID=<?= $post->getId()?>">
@@ -44,11 +44,11 @@
                     </div>
                 </div>
             </div>
-            <div class="tags text-info">
+            <div class="tags">
                 <?= $post->getTags() ?>
                 <a href="?c=home&a=post"></a>
             </div>
-            <div class="text-white">
+            <div class="text">
                 <?= $post->getText() ?>
             </div>
 

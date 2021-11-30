@@ -8,14 +8,14 @@
         <?php foreach (\App\Models\Forum::getAll('user_id = ?', [$data->getId()]) as $post) { ?>
             <div class="post">
                 <div class="row">
-                    <div class="col-9">
+                    <div class="col-8">
                         <a href="?c=home&a=forumpost&id=<?= $post->getId()?>">
                             <h2>
                                 <?= $post->getTitle() ?>
                             </h2>
                         </a>
                     </div>
-                    <div class="col-3 justify-content-end row">
+                    <div class="col-4 text-end row">
                         <div>
                             by <?= $post->getUser()->getUsername() ?>
                             <?php if (\App\Auth::isLogged() && $post->getUser()->getMail() == $_SESSION['name']) {?>

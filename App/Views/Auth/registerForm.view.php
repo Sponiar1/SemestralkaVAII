@@ -8,21 +8,21 @@
                     <?= $data['error'] ?>
                 </div>
             <?php } ?>
-            <form method="post" action="?c=auth&a=register">
+            <form name="regForm" method="post" action="?c=auth&a=register" onsubmit="return validateForm()">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="login" id="exampleFormControlInput1" required>
+                    <label for="mail" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="login" id="mail" required>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">username</label>
-                    <input type="text" class="form-control" name="username" id="exampleFormControlInput3" required>
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput2" class="form-label">Heslo</label>
-                    <input type="password" class="form-control" name="password" id="exampleFormControlInput2" required>
+                    <label for="password" class="form-label">Heslo</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Register</button>
                 </div>
             </form>
         </div>

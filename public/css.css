@@ -28,9 +28,15 @@ html, body {
 .foot {
     min-height: auto;
     margin: 0;
-    padding: 0;
-    background: #36393F;
-    border-top: 5px solid rgba(54,57,63,0.9);
+    padding: 0.5rem;
+    padding-bottom: 0;
+    background: rgba(0,97,72,0.89);
+    border: 0.2rem solid black;
+    text-align: center;
+    color: rgba(221,241,255,0.9);
+}
+.foot p{
+    padding: 0.5rem;
 }
 .photo {
     max-width: 100%;
@@ -38,11 +44,58 @@ html, body {
 }
 .post {
     margin-top: 5%;
-    border: solid black;
-    border-width: 3px;
+    border: 0.2rem solid grey;
+    background: rgba(0,97,72,0.89);
     margin-bottom: 3%;
+    color:rgba(255,251,107,0.9);
+    padding-left: 0.5rem;
+}
+.post a {
+    color:rgba(255,251,107,0.9);
 }
 .tags {
-    border: solid black;
-    border-width: 1px;
+    border-top: 0.1rem solid black;
+    border-bottom: 0.1rem solid black;
+    color:rgba(255,90,20,0.9);
+}
+.text {
+    color:white;
+}
+.options {
+
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }

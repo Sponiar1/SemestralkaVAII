@@ -61,8 +61,18 @@ class AuthController extends AControllerRedirect
 
         $login = $this->request()->getValue('login');
         $password = $this->request()->getValue('password');
+        if (strlen($password) < 6){
+            $this->redirect('auth', 'registerForm', ['error' => 'Krátke heslo']);
+        }
+        if (!preg_match('~[0-9]+~', $password)) {
+            $this->redirect('auth', 'registerForm', ['error' => 'Heslo musí obsahovať aspoň jednu číslicu']);
+        }
         $username = $this->request()->getValue('username');
+        if (strlen($username) < 6){
+            $this->redirect('auth', 'registerForm', ['error' => 'Krátke meno']);
+        }
         $registered = Auth::register($login, $password, $username);
+        sleep(5);
         if($registered == "OK")
         {
             $logged = Auth::login($login, $password);

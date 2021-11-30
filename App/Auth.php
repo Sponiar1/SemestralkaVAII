@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Models\User;
-use PDOException;
 
 class Auth
 {
