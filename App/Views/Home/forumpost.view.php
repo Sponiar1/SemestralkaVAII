@@ -1,38 +1,41 @@
 <?php /** @var Array $data */ ?>
 
 <div class="posts text-start">
-
+    <?php if(array_key_exists('error', $data)) {?>
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <?= $data['error'] ?>
+        </div>
+    <?php } ?>
         <div class="post">
             <div class="row">
                 <div class="col-9">
-                    <a href="?c=home&a=post">
                         <h2>
-                            <?= $data->getTitle() ?>
+                            <?= $data['posts']->getTitle() ?>
                         </h2>
-                    </a>
                 </div>
                 <div class="col-3 justify-content-end">
-                    by <?= $data->getUser()->getUsername() ?>
+                    by <?= $data['posts']->getUser()->getUsername() ?>
                 </div>
             </div>
             <div class="tags text-info">
-                <?= $data->getTags() ?>
+                <?= $data['posts']->getTags() ?>
                 <a href="?c=home&a=post"></a>
             </div>
             <div class="text-white">
-                <?= $data->getText() ?>
+                <?= $data['posts']->getText() ?>
             </div>
             <?php if (\App\Auth::isLogged()) { ?>
                 <div class="text-start mt-2">
                     <form method="post" action="?c=home&a=addComment">
-                        <input type="hidden" name="postid" value="<?= $data->getId() ?>">
+                        <input type="hidden" name="postid" value="<?= $data['posts']->getId() ?>">
                         <input type="text" size="19" name="text" placeholder="Vlož svoj komentár">
                         <input type="submit" value="Pošli" name="comment">
                     </form>
                 </div>
                 <div class="comments text-start mt-2">
                     <strong>Komentáre:</strong><br>
-                    <?php foreach ($data->getComments() as $comment) { ?>
+                    <?php foreach ($data['posts']->getComments() as $comment) { ?>
                         <?php $commentUser=\App\Models\User::getOne($comment->getUserId()) ?>
                         <?= $commentUser->getUsername() ?>:
                         <?= $comment->getText() ?><br>

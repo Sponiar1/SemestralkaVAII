@@ -66,7 +66,11 @@ class HomeController extends AControllerRedirect
         if(!Auth::isLogged()) {
             $this->redirect('auth','login');
         }
-        return $this->html();
+        $error = $this->request()->getValue('error');
+        if(isset($error)) {
+            return $this->html(['error' => $error]);
+        }
+        return $this->html([]);
     }
 
     public function editpost()
@@ -118,30 +122,55 @@ class HomeController extends AControllerRedirect
 
     public function uploadpost()
     {
+        $isOk = true;
         if (!Auth::isLogged()) {
             $this->redirect("home");
+            $isOk = false;
         }
         $title = $this->request()->getValue('title');
         $tags = $this->request()->getValue('tags');
         $text = $this->request()->getValue('text');
-        $usertable = new User();
-        $userID = $usertable->getUserIDByMail();
-                $newForum = new Forum();
-                $newForum->setTitle($title);
-                $newForum->setText($text);
-                $newForum->setTags($tags);
-                $newForum->setUserId($userID);
-                $newForum->save();
+        if(strlen($title) > 100){
+            $this->redirect("home", "createpost", ['error' => 'Moc dlhý názov']);
+            $isOk = false;
+        }
+        if(strlen($tags) > 70){
+            $this->redirect("home", "createpost", ['error' => 'Moc dlhé tagy']);
+            $isOk = false;
+        }
+        if(strlen($text) > 1000){
+            $this->redirect("home", "createpost", ['error' => 'Moc dlhý text']);
+            $isOk = false;
+        }
+        if($isOk == true) {
+            $usertable = new User();
+            $userID = $usertable->getUserIDByMail();
+            $newForum = new Forum();
+            $newForum->setTitle($title);
+            $newForum->setText($text);
+            $newForum->setTags($tags);
+            $newForum->setUserId($userID);
+            $newForum->save();
 
-        $this->redirect("home");
+            $this->redirect("home");
+        }
     }
 
     public function forumpost()
     {
         $id = $this->request()->getValue('id');
-        //$posts = Forum::getAll("id = ?", [$id]);
-        $posts = Forum::getOne($id);
-        return $this->html($posts);
+        $error = $this->request()->getValue('error');
+        if(isset($error)) {
+            //$posts = Forum::getAll("id = ?", [$id]);
+            $posts = Forum::getOne($id);
+            return $this->html([
+                'posts' => $posts,
+                'error' => $error
+            ]);
+        } else {
+            $posts = Forum::getOne($id);
+            return $this->html(['posts' => $posts]);
+        }
     }
 
     public function contact()
@@ -191,21 +220,32 @@ class HomeController extends AControllerRedirect
 
     public function addComment()
     {
+        $isOk = true;
         if (!Auth::isLogged()) {
             $this->redirect('home');
+            $isOk = false;
         }
 
         $postId = $this->request()->getValue('postid');
         $usertable = new User();
         $user_id = $usertable->getUserIDByMail();
         $idpostu['id'] = $postId;
-        if($postId) {
-            $newComment = new Comment();
-            $newComment->setPostId($postId);
-            $newComment->setUserId($user_id);
-            $newComment->setText($this->request()->getValue('text'));
-            $newComment->save();
+
+
+        if(strlen($this->request()->getValue('text')) > 255) {
+            $idpostu['error'] = 'Moc dlhý komentár';
+            $this->redirect('home', 'forumpost', $idpostu);
+            $isOk = false;
         }
-        $this->redirect('home', 'forumpost', $idpostu);
+        if($isOk == true) {
+            if ($postId) {
+                $newComment = new Comment();
+                $newComment->setPostId($postId);
+                $newComment->setUserId($user_id);
+                $newComment->setText($this->request()->getValue('text'));
+                $newComment->save();
+            }
+            $this->redirect('home', 'forumpost', $idpostu);
+        }
     }
 }

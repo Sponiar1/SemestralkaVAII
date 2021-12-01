@@ -58,33 +58,37 @@ class AuthController extends AControllerRedirect
         if (Auth::isLogged()) {
             $this->redirect("home");
         }
-
+        $isOK = true;
         $login = $this->request()->getValue('login');
         $password = $this->request()->getValue('password');
         if (strlen($password) < 6){
             $this->redirect('auth', 'registerForm', ['error' => 'Krátke heslo']);
+            $isOK = false;
         }
         if (!preg_match('~[0-9]+~', $password)) {
             $this->redirect('auth', 'registerForm', ['error' => 'Heslo musí obsahovať aspoň jednu číslicu']);
+            $isOK = false;
         }
         $username = $this->request()->getValue('username');
         if (strlen($username) < 6){
             $this->redirect('auth', 'registerForm', ['error' => 'Krátke meno']);
+            $isOK = false;
         }
-        $registered = Auth::register($login, $password, $username);
-        sleep(5);
-        if($registered == "OK")
-        {
-            $logged = Auth::login($login, $password);
-            if ($logged) {
-                $this->redirect('home');
+        if($isOK == true) {
+            $registered = Auth::register($login, $password, $username);
+            sleep(5);
+            if ($registered == "OK") {
+                $logged = Auth::login($login, $password);
+                if ($logged) {
+                    $this->redirect('home');
+                }
+            } else if ($registered == "Mail already used") {
+                $this->redirect('auth', 'registerForm', ['error' => 'Mail already used']);
+            } else if ($registered == "Username already used") {
+                $this->redirect('auth', 'registerForm', ['error' => 'Username already used']);
+            } else {
+                $this->redirect('auth', 'registerForm', ['error' => 'Error']);
             }
-        } else if ($registered == "Mail already used"){
-            $this->redirect('auth', 'registerForm', ['error' => 'Mail already used']);
-        } else if ($registered == "Username already used"){
-            $this->redirect('auth', 'registerForm', ['error' => 'Username already used']);
-        } else {
-            $this->redirect('auth', 'registerForm', ['error' => 'Error']);
         }
     }
 }
