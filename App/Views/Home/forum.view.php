@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-4 text-end row">
                     <div class="options">
-                    by <?= $post->getUser()->getUsername() ?>
+                    by <?= $post->getUser()->getUsername()?>
                         <?php if (\App\Auth::isLogged() && $post->getUser()->getMail() == $_SESSION['name']) {?>
                         <a href="?c=home&a=editpost&postID=<?= $post->getId()?>">
                             <button type="button" class="btn btn-success">
@@ -32,7 +32,7 @@
                                 </svg>
                             </button>
                         </a>
-                                <a href="?c=home&a=deletepost&postID=<?= $post->getId()?>">
+                        <a href="?c=home&a=deletepost&postID=<?= $post->getId()?>">
                         <button type="button" class="btn btn-outline-danger">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
