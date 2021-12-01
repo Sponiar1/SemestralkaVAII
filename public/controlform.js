@@ -21,8 +21,7 @@ function ukazPrvySlide() {
     let prvySlide = document.getElementsByClassName("sliders");
     setTimeout(() => {
         prvySlide[0].style.display = "block";
-        console.log(prvySlide.length);
-    }, 100);
+    }, 10);
 }
 ukazPrvySlide();
 
@@ -55,7 +54,7 @@ function showSlides(n) {
         slides[i].style.display = "none";
     }
     for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
+        dots[i].className = dots[i].className.replace("active", "");
     }
     if(slides[slideIndex]) {
         slides[slideIndex].style.display = "block";
