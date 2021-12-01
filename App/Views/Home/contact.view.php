@@ -3,7 +3,7 @@
     <div class="col">
         <h1>Fakulta riadenia a informatiky</h1>
         <strong>Adresa</strong>: Univerzitná 8215/1, 010 26 Žilina<br>
-        <strong>Tel. číslo</strong>: +421/41 513 4061<br>
+        <strong>Tel. číslo</strong>: +421/88 666 452<br>
 
         <strong>GPS</strong>: 49°12'6,4"N 18°45'42,6"E
     </div>
