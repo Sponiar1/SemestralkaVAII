@@ -63,11 +63,11 @@
         </div>
         <?php } ?>
     </div>
-  <!--  <div class="pages">
-        <?php for($i = 1; $i < $data['maxPage']; $i++) { ?>
-            <a href="?c=home&a=forum">
+  <div class="pages">
+        <?php for($i = 1; $i < $data['maxPage']+1; $i++) { ?>
+            <a href="?c=home&a=forum&page=<?=$i?>">
                 <?= $i ?>
             </a>
         <?php } ?>
-    </div>-->
+    </div>
 </div>

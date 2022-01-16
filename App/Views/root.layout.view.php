@@ -41,7 +41,7 @@
                     <a class="nav-link" href="?c=home&a=news">News</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="?c=home&a=forum">Forum</a>
+                    <a class="nav-link" href="?c=home&a=forum&page=1">Forum</a>
                 </li>
                 <?php if (\App\Auth::isLogged()) { ?>
                     <li class="nav-item ml-0">

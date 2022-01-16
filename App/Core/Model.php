@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Core\DB\Connection;
+use PDO;
 use PDOException;
 
 /**
@@ -181,5 +182,55 @@ abstract class Model implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    static public function getLatest()
+    {
+        self::connect();
+        try {
+            $sql = "SELECT * FROM " . self::getTableName() . " ORDER BY " . self::$pkColumn . " DESC LIMIT 10";
+
+            $stmt = self::$connection->prepare($sql);
+            $stmt->execute([]);
+
+            $dbModels = $stmt->fetchAll();
+            $models = [];
+            foreach ($dbModels as $model) {
+                $tmpModel = new static();
+                $data = array_fill_keys(self::getDbColumns(), null);
+                foreach ($data as $key => $item) {
+                    $tmpModel->$key = $model[$key];
+                }
+                $models[] = $tmpModel;
+            }
+            return $models;
+        } catch (PDOException $e) {
+            throw new \Exception('Query failed: ' . $e->getMessage());
+        }
+    }
+
+    static public function getPage($page)
+    {
+        $page = ($page - 1)*3;
+        self::connect();
+        try {
+            $sql = "SELECT * FROM " . self::getTableName() . " ORDER BY " . self::$pkColumn . " DESC LIMIT " .$page. ", 3";
+            $stmt = self::$connection->prepare($sql);
+            $stmt->execute([]);
+
+            $dbModels = $stmt->fetchAll();
+            $models = [];
+            foreach ($dbModels as $model) {
+                $tmpModel = new static();
+                $data = array_fill_keys(self::getDbColumns(), null);
+                foreach ($data as $key => $item) {
+                    $tmpModel->$key = $model[$key];
+                }
+                $models[] = $tmpModel;
+            }
+            return $models;
+        } catch (PDOException $e) {
+            throw new \Exception('Query failed: ' . $e->getMessage());
+        }
     }
 }

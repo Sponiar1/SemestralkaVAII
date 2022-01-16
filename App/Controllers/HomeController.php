@@ -200,24 +200,18 @@ class HomeController extends AControllerRedirect
         );
     }
 
-    public function news()
-    {
-        return $this->html(
-            []
-        );
-    }
-
     public function forum()
     {
-        $forum_posts = Forum::getAll();
-       /* $forum_posts = Forum::getPage(2);
+        /*$forum_posts = Forum::getAll();*/
+       /* $forum_posts = Forum::getPage(2);*/
+        $page = $this->request()->getValue('page');
         $numberOfPages = Forum::numberOfPages();
-        $page = 1;*/
+        $forum_posts = Forum::getPage($page);
         return $this->html(
             [
                 'forum_posts' => $forum_posts,
-               /* 'page' => $page,
-                'maxPage' => $numberOfPages,*/
+                'page' => $page,
+                'maxPage' => $numberOfPages,
                 'error' => $this->request()->getValue('error')
             ]);
     }
@@ -310,6 +304,14 @@ class HomeController extends AControllerRedirect
         } else {
             $this->redirect('home', 'forum');
         }
+    }
+
+    public function news()
+    {
+        $news = News::getLatest();
+        return $this->html(
+            ['news' => $news]
+        );
     }
 
     public function addNews() {

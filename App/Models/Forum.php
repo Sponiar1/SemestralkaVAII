@@ -32,7 +32,7 @@ class Forum extends \App\Core\Model
         $pr->execute([]);
         $count = $pr->rowCount();
         $maxPage = ceil ($count / 3);
-        return $count;
+        return $maxPage;
     }
 /*
     static public function getPage($page) {
@@ -142,4 +142,5 @@ class Forum extends \App\Core\Model
     {
         return Comment::getAll('post_id = ?', [$this->id]);
     }
+
 }
