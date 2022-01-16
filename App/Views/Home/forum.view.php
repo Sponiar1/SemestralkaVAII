@@ -10,6 +10,12 @@
         Create new post
     </button>
     </a>
+    <?php if($data['error'] !="") {?>
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <?= $data['error'] ?>
+        </div>
+    <?php } ?>
     <div class="posts text-start">
         <?php foreach ($data['forum_posts'] as $post) { ?>
         <div class="post">
@@ -32,8 +38,10 @@
                                 </svg>
                             </button>
                         </a>
-                        <a href="?c=home&a=deletepost&postID=<?= $post->getId()?>">
-                        <button type="button" class="btn btn-outline-danger">
+                        <?php } ?>
+                        <?php if ((\App\Auth::isLogged() && $post->getUser()->getMail() == $_SESSION['name']) || (\App\Auth::isLogged() && \App\Models\User::isAdmin($_SESSION['name']) == 1)) {?>
+                        <a href="?c=home&a=deletepost&postID=<?=$post->getId()?>&login=<?=$post->getUser()->getMail()?>">
+                        <button type="button" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete post?')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
                                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
@@ -55,4 +63,11 @@
         </div>
         <?php } ?>
     </div>
+  <!--  <div class="pages">
+        <?php for($i = 1; $i < $data['maxPage']; $i++) { ?>
+            <a href="?c=home&a=forum">
+                <?= $i ?>
+            </a>
+        <?php } ?>
+    </div>-->
 </div>

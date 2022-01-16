@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Core\DB\Connection;
 
 class Comment extends Model
 {
 
-    public function __construct(public int $id = 0, public ?string $text = null, public int $post_id = 0, public int $user_id = 0)
+    public function __construct(public int $id = 0,
+                                public ?string $text = null,
+                                public int $post_id = 0,
+                                public int $user_id = 0)
     {
 
     }
@@ -15,6 +19,18 @@ class Comment extends Model
     static public function setDbColumns()
     {
         return ['id', 'post_id', 'text', 'user_id'];
+    }
+
+    public static function deleteByPostId($post_id)
+    {
+        self::connect();
+        $pr = Connection::connect()->prepare('DELETE FROM comments WHERE post_id = ?');
+        $pr->execute([$post_id]);
+    }
+
+    public function getUser()
+    {
+        return User::getOne($this->getUserId());
     }
 
     /**

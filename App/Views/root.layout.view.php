@@ -8,7 +8,9 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="public/css.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="public/controlform.js"></script>
+    <script src="public/username.js"></script>
 </head>
 <body>
 <div class="title">
@@ -48,6 +50,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="?c=home&a=profile">Profile</a>
                     </li>
+                <?php if (\App\Auth::isAdmin()==1) { ?>
+                        <li class="nav-item justify-content-end mr-0">
+                            <a class="nav-link" href="?c=auth&a=adminMenu">Admin menu</a>
+                        </li>
+                    <?php } ?>
                     <li class="nav-item justify-content-end mr-0">
                         <a class="nav-link" href="?c=auth&a=logout">Logout</a>
                     </li>

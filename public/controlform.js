@@ -78,3 +78,11 @@ function showmodal(n) {
         modal.style.display = "none";
     }
 }
+
+class dataController {
+    checkUsername() {
+        fetch('?c=auth&a=usernameTaken($username)')
+            .then(response =>response.json())
+            .then(data => console.log(data));
+    }
+}

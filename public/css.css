@@ -209,3 +209,11 @@ html, body {
         width: 100%;
     }
 }
+
+.reglink a {
+    color: #f1f1f1;
+}
+
+.suggestion-box ul li {
+    border-bottom: 0.5rem solid black;
+}

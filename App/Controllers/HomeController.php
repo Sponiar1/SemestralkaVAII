@@ -7,6 +7,7 @@ use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Models\User;
+use App\Models\News;
 
 /**
  * Class HomeController
@@ -81,7 +82,6 @@ class HomeController extends AControllerRedirect
 
         $postID = $this->request()->getValue('postID');
         $posts = Forum::getAll("id = ?", [$postID]);
-        //$forumpost = Forum::getOne($postID);
 
         return $this->html(
             [
@@ -115,9 +115,15 @@ class HomeController extends AControllerRedirect
 
         $postID = $this->request()->getValue('postID');
         $forumpost = Forum::getOne($postID);
-        $forumpost->delete();
+        $userID = $forumpost->getUser()->getMail();
+        if($userID != $_SESSION['name']) {
+            $this->redirect('home','forum', ['error' => 'You are not owner of the post']);
+        } else {
+            Comment::deleteByPostId($postID);
+            $forumpost->delete();
 
-        $this->redirect('home','forum');
+            $this->redirect('home', 'forum');
+        }
     }
 
     public function uploadpost()
@@ -204,10 +210,15 @@ class HomeController extends AControllerRedirect
     public function forum()
     {
         $forum_posts = Forum::getAll();
-
+       /* $forum_posts = Forum::getPage(2);
+        $numberOfPages = Forum::numberOfPages();
+        $page = 1;*/
         return $this->html(
             [
-                'forum_posts' => $forum_posts
+                'forum_posts' => $forum_posts,
+               /* 'page' => $page,
+                'maxPage' => $numberOfPages,*/
+                'error' => $this->request()->getValue('error')
             ]);
     }
 
@@ -247,5 +258,68 @@ class HomeController extends AControllerRedirect
             }
             $this->redirect('home', 'forumpost', $idpostu);
         }
+    }
+
+    public function editComment()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+
+        $commentID = $this->request()->getValue('commentID');
+       /* $posts = Forum::getAll("id = ?", [Comment::getOne($commentID)->getPostId()]);*/
+        $posts = Forum::getOne(Comment::getOne($commentID)->getPostId());
+        //$forumpost = Forum::getOne($postID);
+
+        return $this->html(
+            [
+                'posts' => $posts,
+                'commentID' => $commentID
+            ]);
+    }
+
+    public function editCommentsave()
+    {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+        $id = $this->request()->getValue('commentID');
+        $text = $this->request()->getValue('text');
+        $editedComment = Comment::getOne($id);
+        $user = $editedComment->getUser()->getMail();
+        if ($user == $_SESSION['name']) {
+            $editedComment->setText($text);
+            $editedComment->save();
+
+            $this->redirect('home', 'forum');
+        } else {
+            $this->redirect('home', 'forum');
+        }
+    }
+
+    public function deleteComment() {
+        if(!Auth::isLogged()) {
+            $this->redirect('auth','login');
+        }
+        $id = $this->request()->getValue('commentID');
+        $chosenComment = Comment::getOne($id);
+        $user = $chosenComment->getUser()->getMail();
+        if ($user == $_SESSION['name']) {
+            $chosenComment->delete();
+            $this->redirect('home', 'forum');
+        } else {
+            $this->redirect('home', 'forum');
+        }
+    }
+
+    public function addNews() {
+        $text = $this->request()->getValue('newstext');
+        $admin = $_SESSION['name'];
+        $news = new News();
+        $news->setText($text);
+        $news->setDate(date('Y-m-d-H-i-s'));
+        $news->setAdminId(User::getAdminID());
+        $news->save();
+        $this->redirect('home', 'news');
     }
 }

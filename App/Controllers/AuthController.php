@@ -53,6 +53,27 @@ class AuthController extends AControllerRedirect
         $this->redirect('home');
     }
 
+    public function adminMenu()
+    {
+        if (!Auth::isLogged()) {
+            $this->redirect('auth', 'loginForm', ['error' => 'Zlé meno alebo heslo!']);
+        }
+        return $this->html(
+            []
+        );
+    }
+
+
+    public function adminUser()
+    {
+        $admin = $this->request()->getValue('search-box');
+        $userID = User::getUserIDByUsername($admin);
+        $user = User::getOne($userID);
+        $user->setAdmin(1);
+        $user->save();
+        $this->redirect('auth', 'adminMenu');
+    }
+
     public function register()
     {
         if (Auth::isLogged()) {
@@ -75,8 +96,7 @@ class AuthController extends AControllerRedirect
             $isOK = false;
         }
         if($isOK == true) {
-            $registered = Auth::register($login, $password, $username);
-            sleep(5);
+            $registered = Auth::register($login, $username, $password);
             if ($registered == "OK") {
                 $logged = Auth::login($login, $password);
                 if ($logged) {

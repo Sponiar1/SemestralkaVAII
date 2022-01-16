@@ -15,7 +15,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" required>
+                    <input type="text" class="form-control" name="username" id="username" oninput="checkUsername()" required>
+                    <span id="check-username"></span>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Heslo</label>

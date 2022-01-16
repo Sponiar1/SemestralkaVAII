@@ -21,7 +21,7 @@
                     <div class = "col-3">
                         <button type="submit" class="btn btn-primary">Prihlásiť</button>
                     </div>
-                    <div class = "col-3">
+                    <div class = "reglink col-3">
                         <a href="?c=auth&a=registerForm">Register</a>
                     </div>
                 </div>

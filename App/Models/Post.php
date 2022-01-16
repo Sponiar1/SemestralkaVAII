@@ -4,7 +4,9 @@ namespace App\Models;
 
 class Post extends \App\Core\Model
 {
-    public function __construct (public int $id = 0, public ?string $image = null, public int $likes = 0)
+    public function __construct (public int $id = 0,
+                                 public ?string $image = null,
+                                 public int $likes = 0)
     {
 
     }
