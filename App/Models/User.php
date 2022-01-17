@@ -8,7 +8,6 @@ class User extends \App\Core\Model
                                 public ?string $username = null,
                                 public ?string $password = null,
                                 public ?string $mail = null,
-                                public ?string $profile_pic = null,
                                 public int $admin = 0)
     {
 
@@ -174,22 +173,6 @@ class User extends \App\Core\Model
     public function setMail(?string $mail): void
     {
         $this->mail = $mail;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getProfilePic(): ?string
-    {
-        return $this->profile_pic;
-    }
-
-    /**
-     * @param string|null $profile_pic
-     */
-    public function setProfilePic(?string $profile_pic): void
-    {
-        $this->profile_pic = $profile_pic;
     }
 
     static public function setDbColumns()
