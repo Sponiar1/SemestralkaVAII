@@ -59,11 +59,14 @@ class AuthController extends AControllerRedirect
             $this->redirect('auth', 'loginForm', ['error' => 'Zlé meno alebo heslo!']);
         }
         $error = $this->request()->getValue('error');
-        return $this->html(
-            ['error' => $error]
-        );
+        if ($error == null) {
+            return $this->html([]);
+        } else {
+            return $this->html(
+                ['error' => $error]
+            );
+        }
     }
-
 
     public function adminUser()
     {
