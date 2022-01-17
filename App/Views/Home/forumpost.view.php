@@ -27,9 +27,9 @@
             </div>
             <?php if (\App\Auth::isLogged()) { ?>
                 <div class="text-start mt-2">
-                    <form method="post" action="?c=home&a=addComment">
+                    <form name="comment" method="post" action="?c=home&a=addComment" onsubmit="return validateComment()">
                         <input type="hidden" name="postid" value="<?= $data['posts']->getId() ?>">
-                        <input type="text" size="75" name="text" placeholder="Vlož svoj komentár">
+                        <input type="text" size="60" name="text" placeholder="Vlož svoj komentár (0-255 znakov)">
                         <input type="submit" value="Pošli" name="comment">
                     </form>
                 </div>

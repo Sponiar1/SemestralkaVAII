@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <title>FRI-MVC FW</title>
+    <title>FFTP</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -27,9 +27,6 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="?c=home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?c=home&a=faq">FAQ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="?c=home&a=contact">Contact</a>

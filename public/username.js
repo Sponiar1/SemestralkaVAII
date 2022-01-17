@@ -26,7 +26,6 @@ $(document).ready(function(){
                 $("#suggesstion-box").css("cursor","pointer");
                 $("#suggesstion-box").css("text-allign","center");
                 $("#suggesstion-box").css("width","200px");
-                $("#suggesstion-box").css("border-bottom","0.1rem solid black");
                 $("#suggesstion-box").css("margin-left","auto");
                 $("#suggesstion-box").css("margin-right","auto");
             }

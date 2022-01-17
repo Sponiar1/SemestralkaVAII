@@ -15,6 +15,57 @@ function validateForm() {
         return false;
     }
 }
+
+function validateNews() {
+    let x = document.forms["postnews"]["newstext"].value;
+    if(x.length < 3) {
+        alert("Krátky post");
+        return false;
+    }
+    if(x.length > 255) {
+        alert("Moc dlhý post");
+        return false;
+    }
+}
+
+function validatePost() {
+    let x = document.forms["forum"]["title"].value;
+    let y = document.forms["forum"]["tags"].value;
+    let z = document.forms["forum"]["text"].value;
+    if(x.length < 5) {
+        alert("Krátky názov postu");
+        return false;
+    }
+    if(x.length > 100) {
+        alert("Moc názov postu");
+        return false;
+    }
+    if(y.length > 70) {
+        alert("Moc veľa tagov");
+        return false;
+    }
+    if(z.length < 5) {
+        alert("Málo textu v poste");
+        return false;
+    }
+    if(z.length > 1000) {
+        alert("Príliš dlhý text");
+        return false;
+    }
+}
+
+function validateComment() {
+    let x = document.forms["comment"]["text"].value;
+    if(x.length < 5) {
+        alert("Krátky komentár");
+        return false;
+    }
+    if(x.length > 255) {
+        alert("Moc dlhý komentár");
+        return false;
+    }
+}
+
 let slideIndex = 0;
 
 function ukazPrvySlide() {
@@ -76,13 +127,5 @@ function showmodal(n) {
 
     span.onclick = function () {
         modal.style.display = "none";
-    }
-}
-
-class dataController {
-    checkUsername() {
-        fetch('?c=auth&a=usernameTaken($username)')
-            .then(response =>response.json())
-            .then(data => console.log(data));
     }
 }

@@ -63,11 +63,15 @@
         </div>
         <?php } ?>
     </div>
-  <div class="pages">
+  <div class="pages">      <nav aria-label="...">
+          <ul class="pagination pagination-sm">
         <?php for($i = 1; $i < $data['maxPage']+1; $i++) { ?>
-            <a href="?c=home&a=forum&page=<?=$i?>">
+            <li class="page-item">
+            <a class="page-link" href="?c=home&a=forum&page=<?=$i?>">
                 <?= $i ?>
             </a>
+              </li>
         <?php } ?>
+          </ul>
     </div>
 </div>

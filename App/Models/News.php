@@ -76,16 +76,12 @@ class News extends \App\Core\Model
     {
         $this->date = $date;
     }
-/*
-    public static function getLatest() {
-        self::connect();
-        $pr = Connection::connect()->prepare('SELECT * FROM news ORDER BY id Desc LIMIT 10');
-        $pr->execute([]);
-        $news = $pr->fetchAll();
-        $count = $pr->rowCount();
-        return $news;
+
+    public function getUser()
+    {
+        return User::getOne($this->getAdminId());
     }
-*/
+
     static public function setDbColumns()
     {
         return ['id', 'admin_id', 'text', 'date'];

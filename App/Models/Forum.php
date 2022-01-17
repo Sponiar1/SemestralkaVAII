@@ -34,25 +34,7 @@ class Forum extends \App\Core\Model
         $maxPage = ceil ($count / 3);
         return $maxPage;
     }
-/*
-    static public function getPage($page) {
-        self::connect();
-        $rowsPerPage = 1;
-        $pr = Connection::connect()->prepare("SELECT * FROM forum LIMIT ?, ?");
-        /*$pr->bindParam("ii",$page,$rowsPerPage);
-        $pr->bindParam('1', $page, PDO::PARAM_INT);
-        $pr->bindParam('2', $rowsPerPage, PDO::PARAM_INT);
-        $pr->execute([]);
-        $count = $pr->rowCount();
-        $data = $pr->fetch();
-        $i = 0;
-        foreach ($data as $post) {
-            $pole[$i] = $post;
-            $i++;
-        }
-        return $count;
-    }
-*/
+
     public function getUser()
     {
         return User::getOne($this->getUserId());

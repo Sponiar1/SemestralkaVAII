@@ -116,7 +116,7 @@ class HomeController extends AControllerRedirect
         $postID = $this->request()->getValue('postID');
         $forumpost = Forum::getOne($postID);
         $userID = $forumpost->getUser()->getMail();
-        if($userID != $_SESSION['name']) {
+        if($userID != $_SESSION['name'] && User::isAdmin($_SESSION['name'])!=1) {
             $this->redirect('home','forum', ['error' => 'You are not owner of the post']);
         } else {
             Comment::deleteByPostId($postID);
@@ -205,6 +205,9 @@ class HomeController extends AControllerRedirect
         /*$forum_posts = Forum::getAll();*/
        /* $forum_posts = Forum::getPage(2);*/
         $page = $this->request()->getValue('page');
+        if($page == null || $page == 0) {
+            $page = 1;
+        }
         $numberOfPages = Forum::numberOfPages();
         $forum_posts = Forum::getPage($page);
         return $this->html(
@@ -310,18 +313,25 @@ class HomeController extends AControllerRedirect
     {
         $news = News::getLatest();
         return $this->html(
-            ['news' => $news]
+            ['news' => $news,
+             'error' => $this->request()->getValue('error')]
         );
     }
 
     public function addNews() {
         $text = $this->request()->getValue('newstext');
-        $admin = $_SESSION['name'];
-        $news = new News();
-        $news->setText($text);
-        $news->setDate(date('Y-m-d-H-i-s'));
-        $news->setAdminId(User::getAdminID());
-        $news->save();
-        $this->redirect('home', 'news');
+        if(strlen($text) < 3) {
+            $this->redirect('home', 'news', ['error' => 'Krátky post']);
+        } else if (strlen($text) > 255) {
+            $this->redirect('home', 'news', ['error' => 'Moc dlhý post']);
+        } else {
+            $admin = $_SESSION['name'];
+            $news = new News();
+            $news->setText($text);
+            $news->setDate(date('Y-m-d-H-i-s'));
+            $news->setAdminId(User::getAdminID());
+            $news->save();
+            $this->redirect('home', 'news');
+        }
     }
 }
