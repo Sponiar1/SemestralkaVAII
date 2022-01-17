@@ -27,16 +27,6 @@ class HomeController extends AControllerRedirect
             ]);
     }
 
-    public function addLike()
-    {
-        $postId = $this->request()->getValue('postid');
-        if ($postId > 0) {
-            $post = Post::getOne($postId);
-            $post->addLike();
-        }
-        $this->redirect('home');
-    }
-
     public function upload()
     {
         if (!Auth::isLogged()) {
@@ -99,12 +89,32 @@ class HomeController extends AControllerRedirect
         $tags = $this->request()->getValue('tags');
         $text = $this->request()->getValue('text');
         $forumpost = Forum::getOne($id);
-        $forumpost->setTitle($title);
-        $forumpost->setTags($tags);
-        $forumpost->setText($text);
-        $forumpost->save();
+        if($forumpost->getUser()->getMail()!=$_SESSION['name']) {
+            $this->redirect('home','forum', ['error' => "Nie ste vlastníkom postu"]);
+        } else {
+            if (strlen($title) < 5) {
+                $this->redirect('home', 'forum', ['error' => "Krátky názov postu"]);
+            }
+            else if (strlen($title) > 100) {
+                $this->redirect('home', 'forum', ['error' => "Moc dlhý názov postu"]);
+            }
+            else if (strlen($tags) > 70) {
+                $this->redirect('home', 'forum', ['error' => "Veľa tagov na poste "]);
+            }
+            else if (strlen($text) < 5) {
+                $this->redirect('home', 'forum', ['error' => "Krátky popis postu"]);
+            }
+            else if (strlen($text) > 1000) {
+                $this->redirect('home', 'forum', ['error' => "Veľký popis postu"]);
+            } else {
+                $forumpost->setTitle($title);
+                $forumpost->setTags($tags);
+                $forumpost->setText($text);
+                $forumpost->save();
 
-        $this->redirect('home','forum');
+                $this->redirect('home', 'forum');
+            }
+        }
     }
 
     public function deletepost()
@@ -140,12 +150,20 @@ class HomeController extends AControllerRedirect
             $this->redirect("home", "createpost", ['error' => 'Moc dlhý názov']);
             $isOk = false;
         }
+        if(strlen($title) < 5){
+            $this->redirect("home", "createpost", ['error' => 'Krátky názov']);
+            $isOk = false;
+        }
         if(strlen($tags) > 70){
             $this->redirect("home", "createpost", ['error' => 'Moc dlhé tagy']);
             $isOk = false;
         }
         if(strlen($text) > 1000){
             $this->redirect("home", "createpost", ['error' => 'Moc dlhý text']);
+            $isOk = false;
+        }
+        if(strlen($text) < 5){
+            $this->redirect("home", "createpost", ['error' => 'Krátky popis postu']);
             $isOk = false;
         }
         if($isOk == true) {
@@ -158,7 +176,7 @@ class HomeController extends AControllerRedirect
             $newForum->setUserId($userID);
             $newForum->save();
 
-            $this->redirect("home");
+            $this->redirect("home", "forum");
         }
     }
 
@@ -167,7 +185,6 @@ class HomeController extends AControllerRedirect
         $id = $this->request()->getValue('id');
         $error = $this->request()->getValue('error');
         if(isset($error)) {
-            //$posts = Forum::getAll("id = ?", [$id]);
             $posts = Forum::getOne($id);
             return $this->html([
                 'posts' => $posts,
@@ -186,13 +203,6 @@ class HomeController extends AControllerRedirect
         );
     }
 
-    public function faq()
-    {
-        return $this->html(
-            []
-        );
-    }
-
     public function about()
     {
         return $this->html(
@@ -202,13 +212,13 @@ class HomeController extends AControllerRedirect
 
     public function forum()
     {
-        /*$forum_posts = Forum::getAll();*/
-       /* $forum_posts = Forum::getPage(2);*/
+        /*$forum_posts = Forum::getAll();
+        $forum_posts = Forum::getPage(2);*/
         $page = $this->request()->getValue('page');
-        if($page == null || $page == 0) {
+        $numberOfPages = Forum::numberOfPages();
+        if($page == null || $page == 0 || $page > $numberOfPages) {
             $page = 1;
         }
-        $numberOfPages = Forum::numberOfPages();
         $forum_posts = Forum::getPage($page);
         return $this->html(
             [
@@ -233,15 +243,19 @@ class HomeController extends AControllerRedirect
             $this->redirect('home');
             $isOk = false;
         }
-
+        $text =$this->request()->getValue('text');
         $postId = $this->request()->getValue('postid');
         $usertable = new User();
         $user_id = $usertable->getUserIDByMail();
         $idpostu['id'] = $postId;
 
-
-        if(strlen($this->request()->getValue('text')) > 255) {
+        if(strlen($text) > 255) {
             $idpostu['error'] = 'Moc dlhý komentár';
+            $this->redirect('home', 'forumpost', $idpostu);
+            $isOk = false;
+        }
+        if(strlen($text) < 5) {
+            $idpostu['error'] = 'Krátky komentár';
             $this->redirect('home', 'forumpost', $idpostu);
             $isOk = false;
         }
@@ -250,7 +264,7 @@ class HomeController extends AControllerRedirect
                 $newComment = new Comment();
                 $newComment->setPostId($postId);
                 $newComment->setUserId($user_id);
-                $newComment->setText($this->request()->getValue('text'));
+                $newComment->setText($text);
                 $newComment->save();
             }
             $this->redirect('home', 'forumpost', $idpostu);
@@ -264,9 +278,7 @@ class HomeController extends AControllerRedirect
         }
 
         $commentID = $this->request()->getValue('commentID');
-       /* $posts = Forum::getAll("id = ?", [Comment::getOne($commentID)->getPostId()]);*/
         $posts = Forum::getOne(Comment::getOne($commentID)->getPostId());
-        //$forumpost = Forum::getOne($postID);
 
         return $this->html(
             [
@@ -280,17 +292,32 @@ class HomeController extends AControllerRedirect
         if(!Auth::isLogged()) {
             $this->redirect('auth','login');
         }
+        $isOk = true;
         $id = $this->request()->getValue('commentID');
         $text = $this->request()->getValue('text');
         $editedComment = Comment::getOne($id);
         $user = $editedComment->getUser()->getMail();
-        if ($user == $_SESSION['name']) {
-            $editedComment->setText($text);
-            $editedComment->save();
+        $idpostu['id'] = $editedComment->getPostId();
 
-            $this->redirect('home', 'forum');
-        } else {
-            $this->redirect('home', 'forum');
+        if(strlen($text) > 255) {
+            $idpostu['error'] = 'Moc dlhý komentár';
+            $this->redirect('home', 'forumpost', $idpostu);
+            $isOk = false;
+        }
+        if(strlen($text) < 5) {
+            $idpostu['error'] = 'Krátky komentár';
+            $this->redirect('home', 'forumpost', $idpostu);
+            $isOk = false;
+        }
+        if($isOk) {
+            if ($user == $_SESSION['name']) {
+                $editedComment->setText($text);
+                $editedComment->save();
+                $this->redirect('home', 'forumpost', $idpostu);
+            } else {
+                $idpostu['error'] = 'Nie ste vlastníkom komentára';
+                $this->redirect('home', 'forumpost', $idpostu);
+            }
         }
     }
 
@@ -300,12 +327,13 @@ class HomeController extends AControllerRedirect
         }
         $id = $this->request()->getValue('commentID');
         $chosenComment = Comment::getOne($id);
+        $idpostu['id'] = $chosenComment->getPostId();
         $user = $chosenComment->getUser()->getMail();
-        if ($user == $_SESSION['name']) {
+        if ($user == $_SESSION['name'] || User::isAdmin($_SESSION['name'])==1) {
             $chosenComment->delete();
-            $this->redirect('home', 'forum');
+            $this->redirect('home', 'forumpost', $idpostu);
         } else {
-            $this->redirect('home', 'forum');
+            $this->redirect('home', 'forumpost', $idpostu);
         }
     }
 
@@ -325,13 +353,18 @@ class HomeController extends AControllerRedirect
         } else if (strlen($text) > 255) {
             $this->redirect('home', 'news', ['error' => 'Moc dlhý post']);
         } else {
-            $admin = $_SESSION['name'];
-            $news = new News();
-            $news->setText($text);
-            $news->setDate(date('Y-m-d-H-i-s'));
-            $news->setAdminId(User::getAdminID());
-            $news->save();
-            $this->redirect('home', 'news');
+            $isAdmin = User::isAdmin($_SESSION['name']);
+            if($isAdmin == 1) {
+                $news = new News();
+                $user = new User();
+                $news->setText($text);
+                $news->setDate(date('Y-m-d-H-i-s'));
+                $news->setAdminId($user->getUserIDByMail());
+                $news->save();
+                $this->redirect('home', 'news');
+            } else {
+                $this->redirect('home', 'news', ['error' => 'Len admini môžu postovať novinky']);
+            }
         }
     }
 }

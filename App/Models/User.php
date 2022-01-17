@@ -53,7 +53,7 @@ class User extends \App\Core\Model
         return $foundid;
     }
 
-    public static function getUserIDByUsername($username)
+    public function getUserIDByUsername($username)
     {
         self::connect();
         $pr = Connection::connect()->prepare('SELECT * FROM users WHERE username = ?');
